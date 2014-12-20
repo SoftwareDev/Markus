@@ -20,9 +20,6 @@
  *                             Must be a string or React DOM object.
  *                             Remember to make this I18n.
  *                  - sortable: boolean that determines whether a column is sortable.
- *                  - compare: a function defining custom comparison behaviour
- *                             for sorting by column. Leave undefined to use the
- *                             default comparison operators.
  *                  - searchable: boolean that determines whether the stuff in a column
  *                                can be searched.
  *             columns is used to create the table header.
@@ -59,19 +56,17 @@ var Table = React.createClass({displayName: 'Table',
   getInitialState: function() {
     var first_sortable_column = this.props.columns.filter(function(col) {
       return col.sortable == true;
-    })[0];
-    var first_filter_name =
-        this.props.filters ? this.props.filters[0].name : null;
-    var first_filter_func =
-        this.props.filters ? this.props.filters[0].func : null;
+    })[0].id;
+
+    var first_filter_name = this.props.filters ? this.props.filters[0].name : null;
+    var first_filter_func = this.props.filters ? this.props.filters[0].func : null;
     return {
       visible_rows: [],
       selected_rows: [],
       filter: first_filter_name,
       filter_func: first_filter_func,
-      sort_column: first_sortable_column.id,
-      sort_direction: 'asc',
-      sort_compare: first_sortable_column.compare
+      sort_column: first_sortable_column,
+      sort_direction: 'asc'
     }
   },
   componentDidMount: function() {
@@ -102,13 +97,9 @@ var Table = React.createClass({displayName: 'Table',
   },
   // Header col was clicked. Adjust state accordingly.
   synchronizeHeaderColumn: function(sort_column, sort_direction) {
-    var compare_func = this.props.columns.filter(function(col) {
-        return col.id == sort_column;
-    })[0].compare;
     this.setState({
-      sort_column: sort_column,
-      sort_direction: sort_direction,
-      sort_compare: compare_func
+      sort_column: sort_column, 
+      sort_direction: sort_direction
     });
   },
   headerCheckboxClicked: function(event) {
@@ -151,7 +142,7 @@ var Table = React.createClass({displayName: 'Table',
     var filtered_data = filter_data(new_data,
                                     filter_function);
     var searched_data = search_data(filtered_data,
-                                    searchables,
+                                    searchables, 
                                     search_text);
     var visible_data = searched_data;
     return visible_data;
@@ -176,7 +167,7 @@ var Table = React.createClass({displayName: 'Table',
         TableSearch( {onSearchInputChange:this.synchronizeSearchInput,
           placeholder:this.props.search_placeholder} ),
         React.DOM.div( {className:"table"},
-          React.DOM.table( {},
+          React.DOM.table( {className:"table"},
             TableHeader( {columns:columns,
               sort_column:this.state.sort_column,
               sort_direction:this.state.sort_direction,
@@ -259,14 +250,14 @@ SimpleTableFilter = React.createClass({displayName: 'SimpleTableFilter',
     for (var i = 0; i < this.props.filters.length; i++) {
       // Get number of elements that pass filter
       var number = this.props.data.filter(this.props.filters[i].func).length;
-      var fltr =
+      var fltr = 
         (this.props.current_filter == this.props.filters[i].name ?
-         React.DOM.span( {key:this.props.filters[i].name},
+         React.DOM.span( {key:this.props.filters[i].name}, 
            this.props.filters[i].text + " (" + number + ")"
            ) :
           React.DOM.a( {key:this.props.filters[i].name,
             id:this.props.filters[i].name,
-            onClick:this.filterClicked},
+            onClick:this.filterClicked}, 
             this.props.filters[i].text + " (" + number + ")"
           ));
       filters_dom.push(fltr);
@@ -341,8 +332,8 @@ TableHeader = React.createClass({displayName: 'TableHeader',
     }.bind(this));
 
     return (
-      React.DOM.thead(null,
-        React.DOM.tr(null,
+      React.DOM.thead(null, 
+        React.DOM.tr(null, 
           header_columns
         )
       )
@@ -354,7 +345,7 @@ TableFooter = React.createClass({displayName: 'TableFooter',
   propTypes: {
     sort_column: React.PropTypes.string,
     sort_direction: React.PropTypes.string,
-    columns: React.PropTypes.array
+    columns: React.PropTypes.array,
   },
   render: function() {
     // Create the footer columns
@@ -373,8 +364,8 @@ TableFooter = React.createClass({displayName: 'TableFooter',
     }.bind(this));
 
     return (
-      React.DOM.tfoot(null,
-        React.DOM.tr(null,
+      React.DOM.tfoot(null, 
+        React.DOM.tr(null, 
           footer_columns
         )
       )
@@ -389,15 +380,14 @@ TableRows = React.createClass({displayName: 'TableRows',
     selectable: React.PropTypes.bool,
     rowCheckboxClicked: React.PropTypes.func,
     getVisibleRows: React.PropTypes.func,
-    state: React.PropTypes.object
+    state: React.PropTypes.object,
   },
 
   render: function() {
     var visible_data = this.props.getVisibleRows({});
     var sorted_data = sort_by_column(visible_data,
                                      this.props.state.sort_column,
-                                     this.props.state.sort_direction,
-                                     this.props.state.sort_compare);
+                                     this.props.state.sort_direction);
 
     var final_data = null;
     if (this.props.selectable) {
@@ -411,7 +401,7 @@ TableRows = React.createClass({displayName: 'TableRows',
     } else {
       final_data = sorted_data;
     }
-
+    
     // create rows
     // consider instead of recreating array each time, just hiding the rows.
     var rows = [];
@@ -424,7 +414,7 @@ TableRows = React.createClass({displayName: 'TableRows',
     }
 
     return (
-      React.DOM.tbody(null,
+      React.DOM.tbody(null, 
         rows
       )
     );
@@ -444,14 +434,14 @@ TableRow = React.createClass({displayName: 'TableRow',
     for (var i = 0; i < this.props.columns.length; i++) {
       var key = this.props.columns[i].id;
       cells.push(
-        React.DOM.td( {key:key},
+        React.DOM.td( {key:key}, 
           this.props.row_object[key]
         )
       );
     }
     return (
       React.DOM.tr( {id:this.props.row_object.id,
-                     className: this.props.row_object.class_name},
+                     className: this.props.row_object.class_name}, 
         cells
       )
     );
@@ -489,9 +479,8 @@ function search_item(search_text, item) {
   }
 }
 
-function sort_by_column(data, column, direction, compare) {
-  // determine sort behaviour
-  function makeComparable(a)
+function sort_by_column(data, column, direction) {
+  function makeSortable(a)
   {
     if (typeof a == 'string') {
       return a.toLowerCase().replace(' ', '');
@@ -502,18 +491,17 @@ function sort_by_column(data, column, direction, compare) {
       return a;
     }
   }
-  compare = compare || compare_values;
-
-  // sort row by column id
-  var sorted = data.sort(function(a, b) {
-    return compare(makeComparable(a[column]), makeComparable(b[column]));
+  // sorts column id
+  var r = data.sort(function(a, b) {
+    if (makeSortable(a[column]) > makeSortable(b[column])) {
+      return 1;
+    } else if (makeSortable(b[column]) > makeSortable(a[column])) {
+      return -1;
+    }
+    return 0;
   });
+  // flips order if direction descending.
+  if (direction == 'desc') r.reverse();
 
-  // flip order if direction descending
-  if (direction == 'desc') {
-      sorted.reverse();
-  }
-
-  return sorted;
+  return r;
 }
-
