@@ -119,8 +119,7 @@
   <% end %>
 <% elsif @current_user.ta? && (controller.controller_name == 'assignments' ||
                                 controller.controller_name == 'submissions' ||
-                                controller.controller_name == 'results' ||
-                                controller.controller_name == 'summaries') %>
+                                controller.controller_name == 'results') %>
   <ul class='sub'>
     <li id='dropdown'>
       <span class='dropdown'>
@@ -135,8 +134,7 @@
       </span>
     </li>
     <% if controller.controller_name == 'submissions' ||
-          controller.controller_name == 'results' ||
-          controller.controller_name == 'summaries' %>
+          controller.controller_name == 'results' %>
       <li <% if controller.controller_name == 'submissions' ||
                 controller.controller_name == 'results' %>
             class='active'
@@ -145,12 +143,6 @@
                     controller: 'submissions',
                     action: 'browse',
                     id: @assignment.id %>
-      </li>
-      <li <% if controller.controller_name == 'summaries' %>
-            class='active'
-          <% end %>>
-        <%= link_to t(:summaries),
-                    assignment_summaries_path(@assignment) %>
       </li>
     <% end %>
   </ul>

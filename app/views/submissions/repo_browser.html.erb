@@ -1,7 +1,12 @@
 <% content_for :head do %>
   <%= javascript_include_tag 'jquery-ui-timepicker-addon' %>
   <%= stylesheet_link_tag 'common/jquery-ui', 'common/jquery-ui-timepicker-addon' %>
-  <%= render partial: 'repo_files_table', formats: [:'js.jsx'], handlers: [:erb] %>
+  <%= javascript_include_tag 'FilterTable/FilterTable' %>
+  <%= javascript_include_tag 'repo_browser' %>
+
+  <%= render partial: 'repo_browser_boot',
+             formats: [:js],
+             handlers: [:erb] %>
 <% end %>
 
 <% if flash[:error] -%>
@@ -105,7 +110,9 @@
     <% end %>
   </div>
 
-  <div id='files_table'></div>
+  <div class='table' id='files_table'>
+    <table class='files' id='files'></table>
+  </div>
 </div>
 
 <script>

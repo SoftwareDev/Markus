@@ -1,8 +1,7 @@
-/**
- * Annotation Text Manager Class
- *
- * This class is in charge of controlling the Annotation Texts
- */
+/** Annotation Text Manager Class
+
+    This class is in charge of controlling the Annotation Texts
+*/
 
 function AnnotationTextManager() {
   this.annotation_texts = [];
