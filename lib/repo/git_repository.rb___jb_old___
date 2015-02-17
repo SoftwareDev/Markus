@@ -573,7 +573,7 @@ module Repository
         end
         user_id_permissions_map.each do |user_id, permissions|
           perm_string = __translate_to_git_perms(permissions)
-          puts "adding persmission: ", user_id
+          puts "adding persmission: ", repo_name
           repo.add_permission(perm_string, "", user_id)
         end
         conf.add_repo(repo)

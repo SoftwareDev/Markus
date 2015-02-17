@@ -50,6 +50,7 @@ class SubmissionsController < ApplicationController
     @repository_name = @grouping.group.repository_name
     repo = @grouping.group.repo
 
+    $stderr.puts Repository.conf[:REPOSITORY_STORAGE]
     begin
       if params[:revision_number]
         @revision_number = params[:revision_number].to_i
