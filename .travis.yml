@@ -10,7 +10,7 @@ before_install:
   - echo "git:password" | sudo chpasswd
   - sudo adduser git sudo
   - sudo cp ~/.ssh/id_rsa.pub /home/git/vagrant.pub
-  - sshpass -p password ssh git@localhost
+  - sudo -H -u git bash -c 'echo "I am $USER, with uid $UID"' 
   - git clone git://github.com/sitaramc/gitolite
   - mkdir bin
   - gitolite/install -ln
