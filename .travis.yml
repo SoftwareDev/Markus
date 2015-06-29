@@ -7,11 +7,10 @@ before_install:
   - sudo apt-get install -y sshpass
   - ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
   - sudo adduser -disabled-password --gecos "" git
-  - sudo -H -u git bash -c 'echo "I am $USER, with uid $UID"' 
-  - echo thePassword | sudo passwd git --stdin
+  - echo "git:password" | sudo chpasswd
   - sudo adduser git sudo
   - sudo cp ~/.ssh/id_rsa.pub /home/git/vagrant.pub
-  - sshpass -p thePassword ssh git@localhost
+  - sshpass -p password ssh git@localhost
   - git clone git://github.com/sitaramc/gitolite
   - mkdir bin
   - gitolite/install -ln
