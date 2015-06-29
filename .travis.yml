@@ -4,7 +4,7 @@ rvm:
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install sshpass
+  - sudo apt-get install -y sshpass
   - ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
   - sudo adduser --gecos "" git
   - echo thePassword | sudo passwd git --stdin
