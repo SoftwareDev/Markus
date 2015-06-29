@@ -11,12 +11,11 @@ before_install:
   - sudo adduser git sudo
   - sudo cp ~/.ssh/id_rsa.pub /home/git/vagrant.pub
   - sudo -H -u git bash -c 'echo "I am $USER, with uid $UID"' 
-  - git clone git://github.com/sitaramc/gitolite
-  - mkdir bin
-  - gitolite/install -ln
-  - export PATH="~/bin:$PATH"
-  - gitolite setup -pk vagrant.pub
-  - exit
+  - sudo -H -u git bash -c 'git clone git://github.com/sitaramc/gitolite'
+  - sudo -H -u git bash -c 'mkdir bin'
+  - sudo -H -u git bash -c 'gitolite/install -ln'
+  - sudo -H -u git bash -c 'export PATH="~/bin:$PATH"'
+  - sudo -H -u git bash -c 'gitolite setup -pk vagrant.pub'
   - sudo apt-get install -y cmake libssh2* libgit2* ruby1.9.1-dev
 
 install:
