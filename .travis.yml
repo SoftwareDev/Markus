@@ -7,6 +7,7 @@ before_install:
   - sudo apt-get install -y sshpass
   - ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
   - sudo adduser --gecos "" git
+  - sudo -H -u git bash -c 'echo "I am $USER, with uid $UID"' 
   - echo thePassword | sudo passwd git --stdin
   - sudo adduser git sudo
   - sudo cp ~/.ssh/id_rsa.pub /home/git/vagrant.pub
