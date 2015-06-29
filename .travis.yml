@@ -15,7 +15,7 @@ before_install:
   - sudo -H -u git bash -c 'mkdir /home/git/bin'
   - sudo -H -u git bash -c '/home/git/gitolite/install -ln'
   - sudo -H -u git bash -c 'export PATH="~/bin:$PATH"'
-  - sudo -H -u git bash -c 'gitolite setup -pk vagrant.pub'
+  - sudo -H -u git bash -c '/home/git/bin/gitolite setup -pk vagrant.pub'
   - sudo apt-get install -y cmake libssh2* libgit2* ruby1.9.1-dev
 
 install:
