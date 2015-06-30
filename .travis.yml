@@ -30,7 +30,6 @@ before_install:
   - ssh git@localhost
   - ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no git@localhost
   - sudo apt-get install -y cmake libssh2* libgit2* ruby1.9.1-dev
-  - echo hi
 
 install:
   - bundle install --path=~/.bundle --without development production console
