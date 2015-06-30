@@ -3,8 +3,11 @@ rvm:
   - 2.1.2
 
 before_install:
-  - cat ~/.ssh/config
   - cat /etc/hosts
+  - sudo echo host localhost >> ~/.ssh/config
+  - sudo echo   user git >> ~/.ssh/config
+  - sudo echo   identityfile ~/git >> ~/.ssh/config
+  - sudo echo   port 22 >> ~/.ssh/config
   - sudo echo NoHostAuthenticationForLocalhost yes >> ~/.ssh/config
   - sudo apt-get update -qq
   - sudo apt-get install -y sshpass
