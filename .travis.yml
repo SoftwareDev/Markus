@@ -4,6 +4,7 @@ rvm:
 
 before_install:
   - cat /etc/hosts
+  - sudo echo NoHostAuthenticationForLocalhost yes >> ~/.ssh/config
   - ssh 127.0.1.1
   - ssh precise64
   - sudo echo ::1 localhost >> /etc/hosts
