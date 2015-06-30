@@ -3,6 +3,7 @@ rvm:
   - 2.1.2
 
 before_install:
+  - cat ~/.ssh/config
   - cat /etc/hosts
   - sudo echo NoHostAuthenticationForLocalhost yes >> ~/.ssh/config
   - sudo apt-get update -qq
