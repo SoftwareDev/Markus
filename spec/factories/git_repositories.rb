@@ -9,7 +9,7 @@ FactoryGirl.define do
       repository_config['IS_REPOSITORY_ADMIN'] = true
       repo = Repository.get_class('git', repository_config)
       # Open the repo that was cloned from Gitolite in git_revision_spec.rb
-      repo.open("#{::Rails.root}/data/test/repos/test_repo")
+      repo.open("#{::Rails.root}/data/test/repos/test_repo_workdir2")
     end
   end
 end

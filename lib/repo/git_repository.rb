@@ -72,6 +72,8 @@ module Repository
                           some directory with same name exists already")
       end
 
+       puts GITOLITE_SETTINGS
+
       ga_repo = Gitolite::GitoliteAdmin.new(
         Repository.conf[:REPOSITORY_STORAGE] +
           '/gitolite-admin', GITOLITE_SETTINGS)

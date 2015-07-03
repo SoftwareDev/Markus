@@ -20,20 +20,27 @@ describe Repository::GitRevision do
       conf = ga_repo.config
 
       # Remove test repo from Gitolite conf
-      conf.rm_repo('test_repo')
+      conf.rm_repo('test_repo_workdir2')
 
       # Make sure repo was deleted, then remake it
-      repo = ga_repo.config.get_repo('test_repo')
+      repo = ga_repo.config.get_repo('test_repo_workdir2')
       if !repo.nil?
         raise 'Gitolite failed to delete the test_repo before test context!'
       end
 
+# Readd the 'git' public key to the gitolite admin repo after changes
+      admin_key = Gitolite::SSHKey.from_file(
+        GITOLITE_SETTINGS[:public_key])
+      ga_repo.add_key(admin_key)
+
+      # Stage and push the changes to the gitolite admin repo
+      ga_repo.save_and_apply
 
        # Remove workdir (cloned version of the test_repo from Gitolite)
-      FileUtils.rm_rf("#{::Rails.root}/data/test/repos/workdir")
-	
-      Repository.create('test_repo')
+      FileUtils.rm_rf("#{::Rails.root}/data/test/repos/test_repo_workdir2")
 
+      Repository::GitRepository.create("test_repo_workdir2")
+	
     end
 
     let!(:repo) { build(:git_repository) }
