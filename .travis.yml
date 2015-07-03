@@ -17,6 +17,8 @@ before_install:
   - sudo adduser git sudo
   - sudo cp ~/.ssh/id_rsa.pub /home/git/git.pub
   - sudo cp ~/.ssh/id_rsa /home/git/git
+  - sudo chmod 777 /home/git/git.pub
+  - sudo chmod 777 /home/git/git
   - cp ~/.ssh/id_rsa ~/git
   - cp ~/.ssh/id_rsa.pub ~/git.pub
   - sudo -H -u git bash -c 'echo "I am $USER, with uid $UID"' 
