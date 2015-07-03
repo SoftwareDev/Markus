@@ -4,42 +4,21 @@ describe Repository::GitRevision do
   context 'with a git repo' do
     before(:context) do
       
-     
-      
       # Make sure gitolite-admin repo is cloned in test environment
       ga_repo = Gitolite::GitoliteAdmin.new(
         "#{::Rails.root}/data/test/repos/gitolite-admin", GITOLITE_SETTINGS)
 
-      puts 123
-      puts GITOLITE_SETTINGS
-      
       # Bring the repo up to date
       ga_repo.reload!
 
       # Grab the gitolite admin repo config
       conf = ga_repo.config
 
-      # Remove test repo from Gitolite conf
-      conf.rm_repo('test_repo_workdir2')
-
-      # Make sure repo was deleted, then remake it
-      repo = ga_repo.config.get_repo('test_repo_workdir2')
-      if !repo.nil?
-        raise 'Gitolite failed to delete the test_repo before test context!'
+      # Make sure repo exists, if not make it
+      repo = ga_repo.config.get_repo('test_repo_workdir')
+      if repo.nil?
+         Repository::GitRepository.create("test_repo_workdir")
       end
-
-# Readd the 'git' public key to the gitolite admin repo after changes
-      admin_key = Gitolite::SSHKey.from_file(
-        GITOLITE_SETTINGS[:public_key])
-      ga_repo.add_key(admin_key)
-
-      # Stage and push the changes to the gitolite admin repo
-      ga_repo.save_and_apply
-
-       # Remove workdir (cloned version of the test_repo from Gitolite)
-      FileUtils.rm_rf("#{::Rails.root}/data/test/repos/test_repo_workdir2")
-
-      Repository::GitRepository.create("test_repo_workdir2")
 	
     end
 
