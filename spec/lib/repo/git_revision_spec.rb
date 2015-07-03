@@ -28,30 +28,12 @@ describe Repository::GitRevision do
         raise 'Gitolite failed to delete the test_repo before test context!'
       end
 
-      # Generate new test repo
-      repo = Gitolite::Config::Repo.new('test_repo')
 
-      # Add permissions for git user
-      repo.add_permission('RW+', '', 'git')
+       # Remove workdir (cloned version of the test_repo from Gitolite)
+      FileUtils.rm_rf("#{::Rails.root}/data/test/repos/workdir")
+	
+      Repository.create('test_repo')
 
-      # Add the repo to the gitolite admin config
-      conf.add_repo(repo)
-
-      # Readd the 'git' public key to the gitolite admin repo after changes
-      admin_key = Gitolite::SSHKey.from_file(
-        GITOLITE_SETTINGS[:public_key])
-      ga_repo.add_key(admin_key)
-
-      # Stage and push the changes to the gitolite admin repo
-      ga_repo.save_and_apply
-
-      # Remove workdir (cloned version of the test_repo from Gitolite)
-      FileUtils.rm_rf("#{::Rails.root}/data/test/workdir")
-
-      # Repo is created by gitolite, proceed to clone it in
-      # the repository storage location
-      Git.clone('git@localhost:' + "test_repo",
-                "#{::Rails.root}/data/test/workdir")
     end
 
     let!(:repo) { build(:git_repository) }
