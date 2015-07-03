@@ -32,7 +32,7 @@ describe Repository::GitRevision do
       repo = Gitolite::Config::Repo.new('test_repo')
 
       # Add permissions for git user
-      repo.add_permission('RW+', '', 'vagrant')
+      repo.add_permission('RW+', '', 'git')
 
       # Add the repo to the gitolite admin config
       conf.add_repo(repo)
